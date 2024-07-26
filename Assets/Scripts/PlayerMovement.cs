@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float turningSpeed;
@@ -10,17 +11,38 @@ public class PlayerMovement : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
 
-    // Start is called before the first frame update
-    void Start()
+    public override void OnNetworkSpawn()
     {
-        
+        base.OnNetworkSpawn();
+        //NEW START()
+        //OR
+        //NEW AWAKE()
+
     }
 
-    // Update is called once per frame
     void Update()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        if(IsOwner)
+        {
+            if(IsServer && IsLocalPlayer)
+            {
+                horizontalInput = Input.GetAxis("Horizontal");
+                verticalInput = Input.GetAxis("Vertical");
+            }
+            else if(IsClient && IsLocalPlayer)
+            {
+                ReceiveInputServerRpc(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            } 
+        }
+
+    }
+
+    [ServerRpc]
+    void ReceiveInputServerRpc(float h, float v)
+    {
+
+        horizontalInput = h;
+        verticalInput = v;
     }
 
     private void FixedUpdate()

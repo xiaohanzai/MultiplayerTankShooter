@@ -1,31 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class PlayerShooting : MonoBehaviour
+using Unity.Netcode;
+public class PlayerShooting : NetworkBehaviour
 {
     [SerializeField] private Rigidbody myRigidbody; //this is optional
     [SerializeField] private float shootingStrength;
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private NetworkBullet bulletPrefab;
     [SerializeField] private Transform shootingPoint;
 
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
+        
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            Shoot();
+            ShootRPC();
         }
     }
 
-    void Shoot()
+    [Rpc(SendTo.Server)]
+    void ShootRPC()
     {
-        GameObject temporaryBullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
+
+        NetworkBullet temporaryBullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
+        temporaryBullet.shooterOrigin = OwnerClientId;
+        temporaryBullet.NetworkObject.Spawn();
 
         //adding the tank velocity is optional
-        temporaryBullet.GetComponent<Rigidbody>().AddForce(myRigidbody.velocity + temporaryBullet.transform.forward * shootingStrength, ForceMode.VelocityChange);
+        //temporaryBullet.GetComponent<Rigidbody>().AddForce(myRigidbody.velocity + temporaryBullet.transform.forward * shootingStrength, ForceMode.VelocityChange);
 
-        Destroy(temporaryBullet, 3f);
+        //Destroy(temporaryBullet, 3f);
 
     }
 }
