@@ -23,7 +23,8 @@ public class NetworkBullet : NetworkBehaviour
             if(playerHealth && playerHealth.OwnerClientId != shooterOrigin)
             {
                 Debug.Log(shooterOrigin + " damaged " + playerHealth.OwnerClientId);
-                playerHealth.GetDamaged();
+                
+                playerHealth.GetDamaged(shooterOrigin);
             }
 
             NetworkObject.Despawn();
