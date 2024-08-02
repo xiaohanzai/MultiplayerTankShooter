@@ -7,10 +7,11 @@ using TMPro;
 public class PlayerInfo : NetworkBehaviour
 {
     [SerializeField] private TextMeshPro nicknameDisplay;
-    private NetworkVariable<FixedString32Bytes> nickname = new NetworkVariable<FixedString32Bytes>("Player Nickname", 
+    public NetworkVariable<FixedString32Bytes> nickname = new NetworkVariable<FixedString32Bytes>("Player Nickname", 
         NetworkVariableReadPermission.Everyone, 
         NetworkVariableWritePermission.Owner);
 
+    public NetworkVariable<int> killCount = new NetworkVariable<int>();
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -24,7 +25,7 @@ public class PlayerInfo : NetworkBehaviour
             nicknameDisplay.text = nickname.Value.ToString();
         }
 
-        GameManager.Singleton.OnPlayerJoin(NetworkObject);
+        GameManager.Singleton.OnPlayerJoin(this);
     }
     
     public void SetNickname(string newNickname)

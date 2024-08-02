@@ -10,26 +10,51 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private TMP_InputField nickNameInput;
     [SerializeField] private Transform[] spawnPosition;
 
+    private List<PlayerInfo> connectedPlayers = new List<PlayerInfo>();
     public Dictionary<ulong, int> scores = new Dictionary<ulong, int>();
     public static GameManager Singleton { get; private set; }
 
     private void Awake()
     {
         Singleton = this;
+        
     }
 
     private void Update()
     {
-        string tempText = "";
-        foreach(ulong id in scores.Keys)
+
+    }
+
+    public void OnPlayerJoin(PlayerInfo playerObject)
+    {
+        RepositionPlayer(playerObject.NetworkObject);
+        connectedPlayers.Add(playerObject);
+        playerObject.killCount.OnValueChanged += OnKillCountUpdate;
+
+        if (NetworkManager.IsServer)
         {
-            tempText += id + ": " + scores[id] + "\n";
+            playerObject.killCount.Value = 0;
         }
+
+        OnKillCountUpdate(0, 0);
+
+    }
+
+    private void OnKillCountUpdate(int previousNumber, int currentNumber)
+    {
+        string tempText = "";
+
+        foreach (PlayerInfo p in connectedPlayers)
+        {
+            tempText += p.nickname.Value.ToString() + ": " + p.killCount.Value + "\n";
+        }
+
         scoreBoard.text = tempText;
     }
 
     private void RepositionPlayer(NetworkObject playerObject)
     {
+        
         Transform spawnPoint = spawnPosition[Random.Range(0, spawnPosition.Length)];
         playerObject.transform.position = spawnPoint.position;
         playerObject.transform.rotation = spawnPoint.rotation;
@@ -41,15 +66,10 @@ public class GameManager : NetworkBehaviour
         RepositionPlayer(health.NetworkObject);
     }
 
-    public void OnPlayerJoin(NetworkObject playerObject)
-    {
-        RepositionPlayer(playerObject);
-        scores.Add(playerObject.NetworkObjectId, 0);
-    }
 
     public void PlayerGotKill(ulong playerId)
     {
-        scores[playerId]++;
+        NetworkManager.ConnectedClients[playerId].PlayerObject.GetComponent<PlayerInfo>().killCount.Value++;
     }
 
     public void SetLocalPlayer(PlayerInfo playerObject)

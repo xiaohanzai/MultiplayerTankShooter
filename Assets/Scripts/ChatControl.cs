@@ -13,7 +13,7 @@ public class ChatControl : NetworkBehaviour
     {
         if(IsServer)
         {
-            ShowServerMessageRPC(inputField.text, OwnerClientId.ToString());
+            ShowServerMessageRPC(inputField.text, NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInfo>().nickname.Value.ToString());
         }
         else
         {
@@ -29,8 +29,8 @@ public class ChatControl : NetworkBehaviour
         {
             msg = "I am a loser";
         }
-
-        ShowServerMessageRPC(msg, param.Receive.SenderClientId.ToString());
+        string sender = NetworkManager.ConnectedClients[param.Receive.SenderClientId].PlayerObject.GetComponent<PlayerInfo>().nickname.Value.ToString();
+        ShowServerMessageRPC(msg, sender);
     }
 
     [Rpc(SendTo.Everyone)]
