@@ -4,12 +4,9 @@ using UnityEngine;
 using Unity.Netcode;
 public class PlayerShooting : NetworkBehaviour
 {
-    [SerializeField] private Rigidbody myRigidbody; //this is optional
-    [SerializeField] private float shootingStrength;
     [SerializeField] private NetworkBullet bulletPrefab;
     [SerializeField] private Transform shootingPoint;
 
-    // Update is called once per frame
     void Update()
     {
         if (!IsOwner) return;
@@ -27,11 +24,5 @@ public class PlayerShooting : NetworkBehaviour
         NetworkBullet temporaryBullet = Instantiate(bulletPrefab, shootingPoint.position, shootingPoint.rotation);
         temporaryBullet.shooterOrigin = OwnerClientId;
         temporaryBullet.NetworkObject.Spawn();
-
-        //adding the tank velocity is optional
-        //temporaryBullet.GetComponent<Rigidbody>().AddForce(myRigidbody.velocity + temporaryBullet.transform.forward * shootingStrength, ForceMode.VelocityChange);
-
-        //Destroy(temporaryBullet, 3f);
-
     }
 }

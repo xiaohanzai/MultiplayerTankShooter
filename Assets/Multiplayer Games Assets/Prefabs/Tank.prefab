@@ -232,6 +232,7 @@ GameObject:
   - component: {fileID: 4548280584136646519}
   - component: {fileID: 4028433482212596016}
   - component: {fileID: 6472306318311233011}
+  - component: {fileID: 8338882461682758673}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -333,8 +334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f6930e5ffa0c14ca03adba4658147f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRigidbody: {fileID: 4040113818050352350}
-  shootingStrength: 10
   bulletPrefab: {fileID: -115437885289584225, guid: a29c8856c7bca451b93b71a576aea642, type: 3}
   shootingPoint: {fileID: 6455806168969400821}
 --- !u!114 &2105300728636533698
@@ -445,6 +444,21 @@ MonoBehaviour:
         byte0029: 0
   killCount:
     m_InternalValue: 0
+--- !u!114 &8338882461682758673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2708175284520391657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d84785ef0364f62458f815ed34866c47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skinColorIndex:
+    m_InternalValue: 0
+  meshRenderer: {fileID: 3730083614513015225}
 --- !u!1 &2935399457145371416
 GameObject:
   m_ObjectHideFlags: 0
@@ -744,3 +758,8 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.029365227, y: 0.044599924, z: 0.026628174}
   m_Center: {x: 0, y: -0.0047454415, z: 0.0073344754}
+--- !u!23 &3730083614513015225 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 5f6bca0ad11cc49d7b994095c6dbec11, type: 3}
+  m_PrefabInstance: {fileID: 2594775874698949949}
+  m_PrefabAsset: {fileID: 0}

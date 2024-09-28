@@ -14,10 +14,6 @@ public class PlayerMovement : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        //NEW START()
-        //OR
-        //NEW AWAKE()
-
     }
 
     void Update()

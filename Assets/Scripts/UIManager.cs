@@ -17,11 +17,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_InputField codeInputfield;
     [SerializeField] private TMP_InputField messageCenter;
     [SerializeField] private GameObject buttonParent;
+
+    [SerializeField] private PlayerSkinSelector skinSelector;
+
     public void Btn_StartHost()
     {
         StartHostWithRelay();
         buttonParent.SetActive(false);
+        skinSelector.gameObject.SetActive(true);
     }
+
     public async Task<string> StartHostWithRelay(int maxConnections = 5)
     {
         await UnityServices.InitializeAsync();
@@ -45,6 +50,7 @@ public class UIManager : MonoBehaviour
     {
         StartClientWithRelay(codeInputfield.text);
         buttonParent.SetActive(false);
+        skinSelector.gameObject.SetActive(true);
     }
 
     public void Btn_StartServer()
